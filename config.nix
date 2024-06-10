@@ -6,8 +6,9 @@ let
     "nix-gc-roots" = ''
       nix-store --gc --print-roots | egrep -v "^(/nix/var|/run/w+-system|{memory|{censor)"'';
   };
-in {
-  environment.systemPackages = with pkgs; [ atuin ];
+in
+{
+  environment.systemPackages = with pkgs; [ ];
   programs = {
     zsh = {
       enable = true;
@@ -24,14 +25,9 @@ in {
         autoload -U colors && colors
 
         # key bindings
-        bindkey -e
+        bindkey -v
         # Push a command onto a stack allowing you to run another command first
         bindkey '^J' push-line
-
-        # atuin shell completion
-        export ATUIN_NOBIND="true"
-        eval "$(${pkgs.atuin}/bin/atuin init zsh)"
-        bindkey '^r' _atuin_search_widget
       '';
       shellAliases = shell-aliases;
       promptInit = ''
@@ -58,9 +54,6 @@ in {
       shellAliases = shell-aliases;
       interactiveShellInit = ''
         source "${pkgs.bash-preexec}/share/bash/bash-preexec.sh"
-        export ATUIN_NOBIND="true"
-        eval "$(${pkgs.atuin}/bin/atuin init bash)"
-        bind -x '"\C-r": __atuin_history'
       '';
     };
   };
