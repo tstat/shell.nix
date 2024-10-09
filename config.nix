@@ -5,7 +5,10 @@ let
     "l" = "ls -lah --color";
     "nix-gc-roots" = ''
       nix-store --gc --print-roots | egrep -v "^(/nix/var|/run/w+-system|{memory|{censor)"'';
+    "ssh-unsafe" = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
   };
+  shell-functions = ./shell-functions;
+  zsh-functions = ./zsh-functions;
 in
 {
   environment.systemPackages = with pkgs; [
@@ -108,6 +111,9 @@ in
         bindkey -v
         # Push a command onto a stack allowing you to run another command first
         bindkey '^J' push-line
+
+        source ${shell-functions}
+        source ${zsh-functions}
       '';
       shellAliases = shell-aliases;
       promptInit = ''
@@ -134,6 +140,7 @@ in
       shellAliases = shell-aliases;
       interactiveShellInit = ''
         source "${pkgs.bash-preexec}/share/bash/bash-preexec.sh"
+        source ${shell-functions}
       '';
     };
   };

@@ -1,0 +1,29 @@
+function prune-branches() {
+    git for-each-ref 'refs/heads/travis' --format '%(refname:short)' | while read entry
+    do
+        echo -e "Delete \033[92;1m${entry}\033[0m?"
+        if read -qsk
+        then
+            if ! git branch -d "${entry}"
+            then
+                echo -e "Force delete \033[92;1m${entry}\033[0m?"
+                if read -qsk
+                then
+                    git branch -D "${entry}"
+                fi
+            fi
+        fi
+    done
+    git for-each-ref 'refs/tags/travis' --format '%(refname:short)' | while read entry
+    do
+        echo -e "Delete tag \033[92;1m${entry}\033[0m?"
+        if read -qsk
+        then
+            git tag -d "${entry}"
+        fi
+    done
+}
+
+# Local Variables:
+# mode: sh
+# End:

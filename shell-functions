@@ -1,0 +1,12 @@
+json_lines() {
+  while IFS='' read -r line; do
+      if ! jq '.' <<< "$line" 2> /dev/null
+      then
+          echo "$line"
+      fi
+  done
+}
+
+# Local Variables:
+# mode: sh
+# End:
