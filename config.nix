@@ -8,8 +8,88 @@ let
   };
 in
 {
-  environment.systemPackages = with pkgs; [ ];
+  environment.systemPackages = with pkgs; [
+    bat
+    difftastic
+    dtc
+    fd
+    fzf
+    gnumake
+    htop
+    inetutils
+    jq
+    libarchive
+    lsof
+    man-pages
+    man-pages-posix
+    netcat
+    nix-prefetch-git
+    nix-prefetch-github
+    p7zip
+    pciutils
+    pkg-config
+    pv
+    ripgrep
+    screen
+    socat
+    stow
+    tcpdump
+    tmux
+    tmux
+    tree
+    unrar
+    unzip
+    vim
+    wget
+    zip
+    zstd
+  ];
   programs = {
+    screen = {
+      enable = true;
+      screenrc = builtins.readFile ".screenrc";
+    };
+    tmux = {
+      enable = true;
+      baseIndex = 1;
+      clock24 = true;
+      historyLimit = 8192;
+      shortcut = "t";
+      plugins = with pkgs.tmuxPlugins; [
+        dracula
+      ];
+      extraConfig = ''
+        # split panes with vim bindings
+        unbind '"'
+        unbind %
+        bind v split-window -h
+        bind s split-window -v
+        
+        # reload config
+        bind r source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded..."
+        
+        # pane switching
+        bind h select-pane -L
+        bind l select-pane -R
+        bind k select-pane -U
+        bind j select-pane -D
+        
+        # enable mouse control
+        set -g mouse off
+        
+        # don't rename windows automatically
+        set-option -g allow-rename off
+
+        # switch to last pane with C-t, last window with p
+        unbind p
+        bind p last-window
+        bind C-t last-pane
+
+        # joining panes
+        bind h choose-window 'join-pane -h -s "%%"'
+        bind H choose-window 'join-pane -s "%%"'
+      '';
+    };
     zsh = {
       enable = true;
       enableCompletion = true;
