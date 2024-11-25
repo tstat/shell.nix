@@ -140,7 +140,7 @@ in
         autoload -U colors && colors
 
         # key bindings
-        bindkey -v
+        bindkey -e
         # Push a command onto a stack allowing you to run another command first
         bindkey '^J' push-line
 
